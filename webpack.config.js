@@ -16,7 +16,11 @@ module.exports = function() {
         {
           test: /\.tsx?$/,
           loader: 'ts-loader'
-        }
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader']
+        },
       ]
     },
     resolve: {
@@ -29,10 +33,10 @@ module.exports = function() {
       new CopyPlugin({
         patterns: [
           { from: 'index.html' },
-          { from: 'images', to: 'images' }
+          { from: 'public', to: 'public' }
         ]
       }),
-      new ProgressBarPlugin(),
+      new ProgressBarPlugin()
     ],
   }
 }

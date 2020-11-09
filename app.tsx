@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './app.css'
 
 export default class App extends React.Component<any, any> {  
   constructor(props:any) {
@@ -7,19 +8,21 @@ export default class App extends React.Component<any, any> {
     
     this.state = {
       index: 0,
-      imgSrc: ["images/doctor.jpg", "images/dog.jpg"]
+      imgSrc: ["public/images/doctor.jpg", "public/images/dog.jpg", "public/images/vertically-long.jpg"]
     }
   }
   
   render() {
     return (
       <>
-        <div>hi</div>
-        <img
-          src={ this.state.imgSrc[this.state.index] }
-          alt="Doctor"
-          onClick={ () => this.onImgClick() }
-        />
+        <div className="img-container">
+          <img
+            src={ this.state.imgSrc[this.state.index] }
+            onClick={ () => this.onImgClick() }
+          />
+          
+          <div>{ this.state.index }</div>
+        </div>
       </>
     )
   }
