@@ -22,10 +22,16 @@ export default class App extends React.Component<any, any> {
     window.addEventListener('keydown', (ev) => {
       const keycode = ev.code
       if(keycode == 'ArrowLeft') {
-        this.setState((prevState:any) => prevState.index--)
+        const SECOND_INDEX = 1
+        if(this.state.index >= SECOND_INDEX) {
+          this.setState((prevState:any) => prevState.index--)
+        }
       }
       else if(keycode == 'ArrowRight') {
-        this.setState((prevState:any) => prevState.index++)
+        const SECOND_LAST_INDEX = images.length - 2
+        if(this.state.index <= SECOND_LAST_INDEX) {
+          this.setState((prevState:any) => prevState.index++)
+        }
       }
     })
   }
