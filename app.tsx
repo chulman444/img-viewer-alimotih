@@ -14,6 +14,22 @@ export default class App extends React.Component<any, any> {
     }
   }
   
+  componentDidMount() {
+    this.setupArrowKeyListener()
+  }
+  
+  setupArrowKeyListener() {    
+    window.addEventListener('keydown', (ev) => {
+      const keycode = ev.code
+      if(keycode == 'ArrowLeft') {
+        this.setState((prevState:any) => prevState.index--)
+      }
+      else if(keycode == 'ArrowRight') {
+        this.setState((prevState:any) => prevState.index++)
+      }
+    })
+  }
+  
   render() {
     return (
       <>
