@@ -28,7 +28,12 @@ module.exports = function() {
       alias: {
         '~': path.resolve(__dirname)
       }
-    },  
+    },
+    resolveLoader: {
+      alias: {
+        'my-dir-loader': './lib/my-dir-loader/index.js'
+      }
+    },
     plugins: [
       new CopyPlugin({
         patterns: [

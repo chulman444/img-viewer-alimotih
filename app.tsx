@@ -2,13 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './app.css'
 
+const images = require('my-dir-loader!./dir.config.js');
+
 export default class App extends React.Component<any, any> {  
   constructor(props:any) {
     super(props)
     
     this.state = {
       index: 0,
-      imgSrc: ["public/images/doctor.jpg", "public/images/dog.jpg", "public/images/vertically-long.jpg"]
+      imgSrc: images
     }
   }
   
