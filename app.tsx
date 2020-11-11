@@ -15,7 +15,20 @@ export default class App extends React.Component<any, any> {
   }
   
   componentDidMount() {
+    this.setupHashChangeListener()
     this.setupArrowKeyListener()
+    this.loadFromUrl(location.href)
+  }
+  
+  loadFromUrl(url_string:string) {
+    const url = new URL(url_string)
+    const num_hash = parseInt(url.hash.slice(1))
+    if(num_hash != NaN && num_hash > 0 && num_hash < images.length) {
+      this.setState({ index: num_hash - 1 })
+    }
+    else {
+      console.error(`Invalid img index, Loading the first image`)
+    }
   }
   
   setupArrowKeyListener() {    
@@ -24,15 +37,37 @@ export default class App extends React.Component<any, any> {
       if(keycode == 'ArrowLeft') {
         const SECOND_INDEX = 1
         if(this.state.index >= SECOND_INDEX) {
-          this.setState((prevState:any) => prevState.index--)
+          this.viewPrevImg()
         }
       }
       else if(keycode == 'ArrowRight') {
         const SECOND_LAST_INDEX = images.length - 2
         if(this.state.index <= SECOND_LAST_INDEX) {
-          this.setState((prevState:any) => prevState.index++)
+          this.viewNextImg()
         }
       }
+    })
+  }
+  
+  setupHashChangeListener() {
+    window.addEventListener('hashchange', (ev) => {
+      this.loadFromUrl(ev.newURL)
+    })
+  }
+  
+  viewPrevImg() {
+    const new_index = this.state.index - 1
+    this.setState({ index: new_index }, () => {
+      // Will trigger the `hashchange` event listener.
+      location.hash = `#${new_index + 1}`
+    })
+  }
+  
+  viewNextImg() {
+    const new_index = this.state.index + 1
+    this.setState({ index: new_index }, () => {
+      // Will trigger the `hashchange` event listener.
+      location.hash = `#${new_index + 1}`
     })
   }
   
@@ -45,13 +80,16 @@ export default class App extends React.Component<any, any> {
             onClick={ () => this.onImgClick() }
           />
           
-          <div>{ this.state.index }</div>
+          <div>{ this.state.index + 1 }</div>
         </div>
       </>
     )
   }
   
   onImgClick() {
-    this.setState({ index: this.state.index + 1 })
+    const SECOND_LAST_INDEX = images.length - 2
+    if(this.state.index <= SECOND_LAST_INDEX) {
+      this.viewNextImg()
+    }
   }
 }
