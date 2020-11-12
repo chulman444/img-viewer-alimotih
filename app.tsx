@@ -23,7 +23,7 @@ export default class App extends React.Component<any, any> {
   loadFromUrl(url_string:string) {
     const url = new URL(url_string)
     const num_hash = parseInt(url.hash.slice(1))
-    if(num_hash != NaN && num_hash > 0 && num_hash < images.length) {
+    if(num_hash != NaN && num_hash > 0 && num_hash <= images.length) {
       this.setState({ index: num_hash - 1 })
     }
     else {
