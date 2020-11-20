@@ -23,6 +23,7 @@ export default class App extends React.Component<any, any> {
   loadFromUrl(url_string:string) {
     const url = new URL(url_string)
     const num_hash = parseInt(url.hash.slice(1))
+    console.log(num_hash)
     if(num_hash != NaN && num_hash > 0 && num_hash <= images.length) {
       this.setState({ index: num_hash - 1 })
     }
@@ -43,7 +44,7 @@ export default class App extends React.Component<any, any> {
       else if(keycode == 'ArrowRight') {
         const SECOND_LAST_INDEX = images.length - 2
         if(this.state.index <= SECOND_LAST_INDEX) {
-          this.viewNextImg()
+          this.viewNextImg(this.state.index)
         }
       }
     })
@@ -63,8 +64,9 @@ export default class App extends React.Component<any, any> {
     })
   }
   
-  viewNextImg() {
-    const new_index = this.state.index + 1
+  viewNextImg(cur_index:number) {
+    console.log(`viewNextImg`,cur_index)
+    const new_index = cur_index + 1
     this.setState({ index: new_index }, () => {
       // Will trigger the `hashchange` event listener.
       location.hash = `#${new_index + 1}`
@@ -75,10 +77,18 @@ export default class App extends React.Component<any, any> {
     return (
       <>
         <div className="img-container">
-          <img
-            src={ this.state.imgSrc[this.state.index] }
-            onClick={ () => this.onImgClick() }
-          />
+          {
+          Array.from(new Array(images.length)).map((el, i) => {
+            return (
+              <img
+                data-el-index={i}
+                style={{ display: this.state.index == i ? "initial" : "none" }}
+                src={ this.state.imgSrc[i] }
+                onClick={ () => this.viewNextImg(i) }
+              />
+            )
+          })
+          }
           
           <div>{ this.state.index + 1 }</div>
         </div>
@@ -89,7 +99,7 @@ export default class App extends React.Component<any, any> {
   onImgClick() {
     const SECOND_LAST_INDEX = images.length - 2
     if(this.state.index <= SECOND_LAST_INDEX) {
-      this.viewNextImg()
+      this.viewNextImg(this.state.index)
     }
   }
 }
