@@ -24,7 +24,8 @@ export default class App extends React.Component<any, any> {
     const url = new URL(url_string)
     const num_hash = parseInt(url.hash.slice(1))
     if(num_hash != NaN && num_hash > 0 && num_hash <= images.length) {
-      this.setState({ index: num_hash - 1 })
+      const index_from_hash = num_hash - 1
+      this.setState({ index: index_from_hash })
     }
     else {
       console.error(`Invalid img index, Loading the first image`)
@@ -35,16 +36,10 @@ export default class App extends React.Component<any, any> {
     window.addEventListener('keydown', (ev) => {
       const keycode = ev.code
       if(keycode == 'ArrowLeft') {
-        const SECOND_INDEX = 1
-        if(this.state.index >= SECOND_INDEX) {
-          this.viewPrevImg()
-        }
+        this.viewPrevImg()
       }
       else if(keycode == 'ArrowRight') {
-        const SECOND_LAST_INDEX = images.length - 2
-        if(this.state.index <= SECOND_LAST_INDEX) {
-          this.viewNextImg()
-        }
+        this.viewNextImg()
       }
     })
   }
@@ -56,19 +51,35 @@ export default class App extends React.Component<any, any> {
   }
   
   viewPrevImg() {
-    const new_index = this.state.index - 1
-    this.setState({ index: new_index }, () => {
-      // Will trigger the `hashchange` event listener.
-      location.hash = `#${new_index + 1}`
-    })
+    if(this.state.index > 0) {
+      const new_index = this.state.index - 1
+      this.setState({ index: new_index }, () => {
+        // Will trigger the `hashchange` event listener.
+        location.hash = `#${new_index + 1}`
+      })
+    }
+    else {
+      this.setState({ index: images.length - 1 }, () => {
+        // Will trigger the `hashchange` event listener.
+        location.hash = `#${images.length}`
+      })
+    }
   }
   
   viewNextImg() {
-    const new_index = this.state.index + 1
-    this.setState({ index: new_index }, () => {
-      // Will trigger the `hashchange` event listener.
-      location.hash = `#${new_index + 1}`
-    })
+    if(this.state.index < images.length - 1) {
+      const new_index = this.state.index + 1
+      this.setState({ index: new_index }, () => {
+        // Will trigger the `hashchange` event listener.
+        location.hash = `#${new_index + 1}`
+      })
+    }
+    else {
+      this.setState({ index: 1 }, () => {
+        // Will trigger the `hashchange` event listener.
+        location.hash = `#1`
+      })
+    }
   }
   
   render() {
@@ -80,16 +91,17 @@ export default class App extends React.Component<any, any> {
             onClick={ () => this.onImgClick() }
           />
           
-          <div>{ this.state.index + 1 }</div>
+          <div onClick={ () => this.debug() }>{ this.state.index + 1 }</div>
         </div>
       </>
     )
   }
   
+  debug() {
+    console.log(this.state)
+  }
+  
   onImgClick() {
-    const SECOND_LAST_INDEX = images.length - 2
-    if(this.state.index <= SECOND_LAST_INDEX) {
-      this.viewNextImg()
-    }
+    this.viewNextImg()
   }
 }
